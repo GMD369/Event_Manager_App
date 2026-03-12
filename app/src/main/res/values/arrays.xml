@@ -1,0 +1,9 @@
+<resources>
+    <string-array name="event_types">
+        <item>Seminar</item>
+        <item>Workshop</item>
+        <item>Conference</item>
+        <item>Webinar</item>
+        <item>Cultural Event</item>
+    </string-array>
+</resources>
