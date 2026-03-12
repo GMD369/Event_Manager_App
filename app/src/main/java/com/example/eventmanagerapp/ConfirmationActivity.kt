@@ -4,13 +4,25 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.*
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 class ConfirmationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_confirmation)
+
+        // Handle system bars padding
+        val container = findViewById<LinearLayout>(R.id.confirmation_container)
+        ViewCompat.setOnApplyWindowInsetsListener(container) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         val name = intent.getStringExtra("FULL_NAME")
         val phone = intent.getStringExtra("PHONE")
@@ -28,8 +40,12 @@ class ConfirmationActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tv_summary_gender).text = "Gender: $gender"
 
         val ivSummaryImage = findViewById<ImageView>(R.id.iv_summary_image)
-        if (imageUriString != null) {
-            ivSummaryImage.setImageURI(Uri.parse(imageUriString))
+        if (!imageUriString.isNullOrEmpty()) {
+            try {
+                ivSummaryImage.setImageURI(Uri.parse(imageUriString))
+            } catch (e: Exception) {
+                ivSummaryImage.setImageResource(android.R.drawable.ic_menu_gallery)
+            }
         }
 
         findViewById<Button>(R.id.btn_back_home).setOnClickListener {
